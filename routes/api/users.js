@@ -7,6 +7,7 @@ const config = require('config');
 const { check, validationResult } = require('express-validator');
 
 const User = require('../../models/User');
+const auth = require('../../middleware/auth');
 
 // @route       POST  api/users
 // @desc        Register user
@@ -81,10 +82,19 @@ router.post(
             console.error(err.message);
             res.status(500).send('Server error');
         }
+    });
 
-        
-
-    
-});
+// @route       GET  api/users/allusers
+// @desc        get all user
+// @access      private
+router.get('/allusers', auth, async (req, res) => {
+    try {
+        const users = await User.find();
+        return res.json(users);
+    } catch (error) {
+        console.error(error.messages);
+        return res.status(500).send('Server Error');
+    }
+})
 
 module.exports = router;
