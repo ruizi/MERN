@@ -98,13 +98,23 @@ router.delete('/:post_id', auth, async (req, res) => {
 // @access      Private
 router.put('/like/:post_id', auth, async (req, res) => {
     try {
-        const likedPost = await Post.findById(req.params.post_id);
-        if (!likedPost) {
+        console.log('123');
+        const post = await Post.findById(req.params.post_id);
+        if (!post) {
             return res.status(404).json({ msg: 'Post not found' });
         }
-        likedPost.likes.unshift(req.user.id);
-        await likedPost.save();
-        res.json(likedPost);
+        console.log(post.likes);
+        console.log('123');
+        // This means this post is already liked.
+        if (post.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
+            return res.status(400).json({ msg: 'Post already liked' });
+        }
+        console.log('123');
+        post.likes.unshift({user:req.user.id});//unshift is push on the beginning of array.
+        
+        await post.save();
+        
+        res.json(post.likes);
     } catch (err) {
         console.error(err.messages);
         if (err.kind === 'ObjectId') { //incase user input an invalid post id.
@@ -119,19 +129,16 @@ router.put('/like/:post_id', auth, async (req, res) => {
 // @access      Private
 router.put('/unlike/:post_id', auth, async (req, res) => {
     try {
-        const unlikedPost = await Post.findById(req.params.post_id);
-        if (!unlikedPost) {
+        const post = await Post.findById(req.params.post_id);
+        if (!post) {
             return res.status(404).json({ msg: 'Post not found' });
         }
-        // //get the remove index
-        // const removeIndex = unlikedPost.liks.map(item => item.id).indexOf(req.user.id);
-        // //remove the experience from the experiences array.
-        // unlikedPost.likes.splice(removeIndex, 1);
-        unlikedPost.likes.remove(req.user.id);
-        
-        await unlikedPost.save();
 
-        res.json(unlikedPost);
+        post.likes.remove(req.user.id);
+        
+        await post.save();
+
+        res.json(post);
     } catch (err) {
         console.error(err.messages);
         if (err.kind === 'ObjectId') { //incase user input an invalid post id.
