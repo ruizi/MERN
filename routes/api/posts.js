@@ -198,17 +198,15 @@ router.put('/comments/:post_id', [auth,[
 // @route       DELETE  api/posts/comments/:post_id/:comment_id
 // @desc        delete a comment
 // @access      Private
-router.delete('/comments/:post_id/:comment_id', auth, async (req, res) =>  {
+router.delete('/comments/:post_id/:comment_id', auth, async (req, res) => {
     try {
-        console.log("123");
-         //get the post info.
-        console.log(req.params.post_id);
+        //get the post info.
         const post = await Post.findById(req.params.post_id);
-        console.log(post);
+        
         if (!post) {
         return res.status(404).json({ msg: 'Post not found' });
         }
-        console.log("123");
+        
         //pull out comment
         const comment = post.comments.find(comment => comment.id === req.params.comment_id);
         
