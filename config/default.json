@@ -2,5 +2,5 @@
     "mongoURI": "mongodb+srv://Rui:JL0Y4ZSmAhBTqQnf@devconnector.5zgvn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     "jwtSecret": "mysecrettoken",
     "githubClientId":"0796da7205d53df50bd5",
-    "githubSecret":"da505d5d235caba350b51e35f03850c5bf6e6776"
+    "githubSecret":"3b84934fee69f25b3a7c04d03bf7ba8b809b018b"
 }
